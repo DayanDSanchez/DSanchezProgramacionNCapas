@@ -1,0 +1,30 @@
+﻿@model ML.Cocktail
+@{
+    ViewBag.Title = "CocktailDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CocktailDetails</h2>
+
+<div class="row">
+    @if (Model.Drinks != null)
+    {
+        foreach (ML.DatosCocktail cocktail in Model.Drinks)
+        {
+
+            <div class="card m-3" @*style="width: 18rem;"*@>
+                <img class="card-img-top mt-4" style="width: 18rem;" src="@cocktail.strDrinkThumb" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@cocktail.strDrink</h5>
+                    <p>@cocktail.idDrink</p>
+                    <h6>Instrucciones</h6>
+                    <p>@cocktail.strInstructionsES</p>
+                </div>
+            </div>
+        }
+    }
+    else if (Request.QueryString["name"] != null)
+    {
+        <p>No se encontraron resultados para el cóctel.</p>
+    }
+</div>

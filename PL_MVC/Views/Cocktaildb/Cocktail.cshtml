@@ -1,0 +1,41 @@
+﻿@model ML.Cocktail
+@{
+    ViewBag.Title = "Cocktail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cocktail</h2>
+<div class="container">
+
+    @using (Html.BeginForm("Cocktail", "Cocktaildb", FormMethod.Get))
+    {
+        <div class="p-4 border rounded bg-light shadow m-2">
+            <div class="form-group">
+                <label for="searchName" class="form-label">Buscar cocktail:</label>
+                @Html.TextBox("name", null, new { @class = "form-control", @id = "searchName", @placeholder = "cocktail" })
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Buscar</button>
+        </div>
+    }
+    <div class="row">
+        @if (Model.Drinks != null)
+        {
+            foreach (ML.DatosCocktail cocktail in Model.Drinks)
+            {
+
+                <div class="card m-3" style="width: 18rem;">
+                    <img class="card-img-top mt-4" src="@cocktail.strDrinkThumb" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@cocktail.strDrink</h5>
+                        <p>@cocktail.idDrink</p>
+                        <a href=@Url.Action("CocktailDetails","Cocktaildb", new { IdConcktail = cocktail.idDrink }) class="btn btn-primary">Detalles</a>
+                    </div>
+                </div>
+            }
+        }
+        else if (Request.QueryString["name"] != null)
+        {
+            <p>No se encontraron resultados para el cóctel.</p>
+        }
+    </div>
+</div>

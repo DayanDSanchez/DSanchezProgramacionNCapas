@@ -1,0 +1,66 @@
+﻿@model ML.Empresa
+@{
+    ViewBag.Title = "EmpresaGetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>EmpresaGetAll</h2>
+
+<div class="container">
+    <a href="@Url.Action("FormEmpresa", "Empresa")" class="btn btn-primary"><i class="bi bi-file-plus"></i> Agregar Empresa</a>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Editar</th>
+                        <th>Nombre</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (ML.Empresa empresa in Model.Empresas)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("FormEmpresa", "Empresa", new { IdEmpresa = empresa.IdEmpresa })" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td>@empresa.NombreEmpresa</td>
+                            <td>
+                                <form action="@Url.Action("Delete", "Empresa", new { IdEmpresa = empresa.IdEmpresa })" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta empresa?');">
+                                    <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-8">
+            <h4>MAPA</h4>
+            <div id="map" style="width:100%;height:400px;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSKBDdPPlfca_zTwyxKiicRQn1qfgRjLw&callback=initMap" async defer></script>
+
+<script type="text/javascript">
+    // Inicialización del mapa
+    function initMap() {
+        // Coordenadas de ejemplo (puedes cambiarlas por valores dinámicos)
+        var location = { lat: 19.432608, lng: -99.133209 }; // Ciudad de México
+
+        // Crear un mapa y centrarlo en la ubicación
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 10,
+            center: location
+        });
+
+        // Añadir un marcador en la ubicación
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+    }
+</script>

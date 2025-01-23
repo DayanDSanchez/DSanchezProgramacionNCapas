@@ -1,0 +1,133 @@
+﻿@model ML.Cita
+@{
+    ViewBag.Title = "FormAgendar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Agendar Entrevista</h2>
+    <p>Selecciona forma de entrevista</p>
+    <div class="button-group mb-3">
+        <button type="button" class="btn btn-primary" onclick="presencial()">Entrevista Presencial</button>
+        <button type="button" class="btn btn-primary" onclick="remoto()">Entrevista Remota</button>
+    </div>
+    <hr />
+    @using (Html.BeginForm("FormAgendar", "Candidato", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="row" hidden>
+            @if (Model.Candidato.IdCandidato != 0 || Model.IdCita != 0)
+            {
+                <div class="mb-3 col">
+                    @Html.LabelFor(model => model.Candidato.IdCandidato, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.Candidato.IdCandidato, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+                <div class="mb-3 col">
+                    @Html.LabelFor(model => model.IdCita, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.IdCita, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            }
+        </div>
+        <div class="row" style="text-align:center; justify-content:center">
+            <div class="col-md-4">
+                <div class="card" style="width: 100%">
+                    @if (Model.Candidato.Foto == null)
+                    {
+                        <img id="img" class="card-img-top img-fluid" src="~/Content/img/ImageUser.jpg" alt="Imagen del Candidato" style="max-height: 250px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <img id="img" class="card-img-top img-fluid" src="data:image/png;base64,@Convert.ToBase64String(Model.Candidato.Foto)" alt="Imagen del Candidato" style="max-height: 250px; object-fit: cover;">
+                    }
+                    <div class="card-body">
+                        <h4 class="card-title">@Model.Candidato.Nombre @Model.Candidato.ApellidoPaterno @Model.Candidato.ApellidoMaterno</h4>
+                        <p class="card-text">Correo: @Model.Candidato.Correo</p>
+                        <p class="card-text">Telefono: @Model.Candidato.Telefono</p>
+                        @*<div class="mb-3 col" style="text-align:center">
+                                <h4 class="card-text p-2" style="background-color: dodgerblue; border-radius: 5px; color:white"><b>@Model.Candidato.Vacante.NombreVacante</b></h4>
+                            </div>*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h1 id="entrevistaPresencial" class="mb-4">Entrevista Presencial</h1>
+                <h1 id="entrevistaRemota" class="mb-4" hidden>Entrevista Remota</h1>
+                <div class="row" style="justify-content:center">
+                    <div class="form-group mb-3 col-5">
+                        @Html.LabelFor(model => model.FechaHora, new { @class = "form-label" })
+                        @Html.TextBoxFor(model => model.FechaHora, "{0:yyyy-MM-dd HH:mm}", new { @class = "form-control", @type = "datetime-local" })
+                    </div>
+                    @*<div class="form-group mb-3 col-5" id="piso">
+                            @Html.LabelFor(model => model.Piso.Nombre, new { @class = "form-label" })
+                            @Html.DropDownListFor(model => model.Piso.IdPiso, new SelectList(Model.Piso.Pisos, "IdPiso", "Nombre"), "Selecciona Piso", new { @class = "form-control", @id="pisoinput" })
+                        </div>
+                        <div class="form-group mb-3 col-5" id="url" hidden>
+                            @Html.LabelFor(model => model.URL, new { @class = "form-label" })
+                            @Html.TextBoxFor(model => model.URL, new { @class = "form-control", placeholder = "URL", @onkeypress = "soloLetras(event)", @id = "urlinput" })
+                        </div>*@
+                    @if (Model.URL == null && Model.Piso.IdPiso != 0)
+                    {
+                        <div class="form-group mb-3 col-5" id="citaPresencial" style="display:block;">
+                            @Html.LabelFor(model => model.Piso)
+                            @Html.DropDownListFor(model => model.Piso.IdPiso, new SelectList(Model.Piso.Pisos, "IdPiso", "Nombre"), "Seleccione un piso", new { @class = "form-control" })
+                        </div>
+                        <div class="form-group mb-3 col-5" id="citaRemota" style="display: none;">
+                            @Html.LabelFor(model => model.URL)
+                            @Html.TextBoxFor(model => model.URL, new { @class = "form-control", })
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group mb-3 col-5" id="citaRemota" style="display: block;">
+                            @Html.LabelFor(model => model.URL)
+                            @Html.TextBoxFor(model => model.URL, new { @class = "form-control", })
+
+                        </div>
+                        <div class="form-group mb-3 col-5" id="citaPresencial" style="display:none;">
+                            @Html.LabelFor(model => model.Piso)
+                            @Html.DropDownListFor(model => model.Piso.IdPiso, new SelectList(Model.Piso.Pisos, "IdPiso", "Nombre"), "Seleccione un piso", new { @class = "form-control" })
+                        </div>
+                    }
+                    <div class="form-group mb-3 col-5">
+                        @Html.LabelFor(model => model.EstatusCita.Nombre, new { @class = "form-label" })
+                        @Html.DropDownListFor(model => model.EstatusCita.IdEstatusCita, new SelectList(Model.EstatusCita.EstatusCitas, "IdEstatusCita", "Nombre"), "Estatus Cita", new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="mb-3 col">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    @Html.ActionLink("Regresar", "AgendarEntrevista", "Candidato", new { @class = "btn btn-danger" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    function remoto() {
+        var url = document.getElementById("citaRemota");
+        var piso = document.getElementById("citaPresencial");
+        var entrevistaPresencial = document.getElementById("entrevistaPresencial");
+        var entrevistaRemota = document.getElementById("entrevistaRemota");
+
+        // Mostrar campos para entrevista remota y ocultar los de entrevista presencial
+        url.style.display = "block";
+        piso.style.display = "none";
+        entrevistaRemota.removeAttribute("hidden");
+        entrevistaPresencial.setAttribute("hidden", true);
+    }
+
+    function presencial() {
+        var url = document.getElementById("citaRemota");
+        var piso = document.getElementById("citaPresencial");
+        var entrevistaPresencial = document.getElementById("entrevistaPresencial");
+        var entrevistaRemota = document.getElementById("entrevistaRemota");
+
+        // Mostrar campos para entrevista presencial y ocultar los de entrevista remota
+        piso.style.display = "block";
+        url.style.display = "none";
+        entrevistaPresencial.removeAttribute("hidden");
+        entrevistaRemota.setAttribute("hidden", true);
+    }
+</script>

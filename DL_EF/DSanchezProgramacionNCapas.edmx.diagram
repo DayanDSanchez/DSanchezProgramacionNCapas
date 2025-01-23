@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="73e4f63b13fb47648d8bda01a3068f0f" Name="Diagram1" ZoomLevel="63">
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Rol" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Usuario" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdRol" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Colonia" Width="1.5" PointX="9.875" PointY="1.125" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Estado" Width="1.5" PointX="5.375" PointY="1.375" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Municipio" Width="1.5" PointX="7.625" PointY="1.25" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdMunicipio" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdEstado" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Direccion" Width="1.5" PointX="12.125" PointY="1.75" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdColonia" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdUsuario" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.BusquedaAbiertaView" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.BolsaTrabajo" Width="1.5" PointX="7.625" PointY="10.5" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Candidato" Width="1.5" PointX="9.875" PointY="6" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Carrera" Width="1.5" PointX="7.625" PointY="4.125" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.EstatusVacante" Width="1.5" PointX="5.375" PointY="7.5" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Universidad" Width="1.5" PointX="7.625" PointY="12.875" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Vacante" Width="1.5" PointX="7.625" PointY="7" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdBolsaTrabajo" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdCarrera" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdUniversidad" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdVacante" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdEstatusVacante" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Cita" Width="1.5" PointX="12.125" PointY="7.125" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.EstatusCita" Width="1.5" PointX="9.875" PointY="14.75" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Piso" Width="1.5" PointX="14.375" PointY="10.125" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Promedio" Width="1.5" PointX="12.125" PointY="10.625" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdCandidat" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdCandidato" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdEstatusCita" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK_IdPiso" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Empresa" Width="1.5" PointX="0.75" PointY="11.125" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.EmpresaDireccion" Width="1.5" PointX="3" PointY="10.875" />
+        <AssociationConnector Association="DSanchezProgramacionNCapasModel.FK__EmpresaDi__IdEmp__54CB950F" />
+        <EntityTypeShape EntityType="DSanchezProgramacionNCapasModel.Empleado" Width="1.5" PointX="0.75" PointY="13.75" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

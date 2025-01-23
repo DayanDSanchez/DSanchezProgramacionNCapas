@@ -1,0 +1,68 @@
+﻿@model ML.Candidato
+@{
+    ViewBag.Title = "AgendarEntrevista";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <h2>Candidatos</h2>
+    <p>Lista de candidatos por vacante, selecione una vacante para filtrar</p>
+    <div class="col-12">
+        @using (Html.BeginForm("AgendarEntrevista", "Candidato", FormMethod.Get, new { enctype = "multipart/form-data", @class = "mt-4" }))
+        {
+            <div class="row mb-3">
+                <div class="col">
+                    @Html.LabelFor(model => model.Vacante.IdVacante, new { @class = "form-label" })
+                    <div class="input-group">
+                        @Html.DropDownList("IdVacante", new SelectList(Model.Vacante.Vacantes, "IdVacante", "NombreVacante"), "Vacantes", new { @class = "form-select" })
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @if (Model.Candidatos != null)
+    {
+        <div class="row" style="justify-content:space-around; align-items:center">
+            @foreach (ML.Candidato candidato in Model.Candidatos)
+            {
+                <div class="card mb-3" style="width: 45%; height: 300px; background-color: #EEEDED">
+                    <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="position: absolute; bottom: 0; left: 0; height: 50%; width: 100%;">
+                        <path d="M0.00,49.98 C149.99,150.00 349.20,-49.98 500.00,49.98 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #70bcff;"></path>
+                    </svg>
+                    <div class="row g-0" style="z-index: 1">
+                        <div class="col-md-4" style="display: flex; align-items: center; justify-content: center;">
+                            @if (candidato.Foto == null)
+                            {
+                                <img id="img" src="~/Content/img/ImageUser.jpg" style="width:90%; max-height:100%">
+                            }
+                            else
+                            {
+                                <img id="img" src="data:image/png;base64,@Convert.ToBase64String(candidato.Foto)" style="width:90%; max-height:100%">
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row pt-3">
+                                <p class="mb-3 col"><a class="btn btn-primary" href="@Url.Action("FormAgendar","Candidato", new { IdCandidato = candidato.IdCandidato })"><i class="bi bi-calendar-date-fill"></i> Agendar</a></p>
+                                <p class="mb-3 col"><a href="@Url.Action("","", new { IdCandidato = candidato.IdCandidato })" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar el registro?')"><i class="bi bi-trash"></i> Eliminar</a></p>
+                            </div>
+                            <div class="card-body" style="height:220px; overflow:scroll">
+                                <h2 class="card-title mb-4">@candidato.Nombre @candidato.ApellidoPaterno @candidato.ApellidoMaterno</h2>
+                                <p class="card-text mb-1"><b>Edad:</b> @candidato.Edad años</p>
+                                <p class="card-text mb-1"><b>Correo:</b> @candidato.Correo</p>
+                                <p class="card-text mb-1"><b>Telefono:</b> @candidato.Telefono</p>
+                                <p class="card-text mb-1"><b>Direccion:</b> @candidato.Direccion</p>
+                                <p class="card-text mb-1"><b>Universidad:</b> @candidato.Universidad.NombreUniversidad</p>
+                                <p class="card-text mb-1"><b>Carrera:</b> @candidato.Carrera.NombreCarrera</p>
+                                <p class="card-text mb-1"><b>Bolsa de Trabajo:</b> @candidato.BolsaTrabajo.NombreBolsaTrabajo</p>
+                                <p class="card-text mb-1"><b>Vacante:</b> @candidato.Vacante.NombreVacante</p>
+                                @*<p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+

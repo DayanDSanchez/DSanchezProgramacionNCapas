@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewBag.Title = "Validaciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Validaciones</h2>
+<h2>Validación De Input</h2>
+<div class="row">
+    <div class="mb-3 col">
+        <label>Solo Letras</label>
+        <input onkeypress="soloLetras(event)" class="form-control" type="text" placeholder="Letras" />
+    </div>
+
+    <div class="mb-3 col">
+        <label>Solo Numeros</label>
+        <input onkeypress="soloNumeros(event)" class="form-control" type="text" placeholder="Numeros" />
+    </div>
+</div>
+
+<h2>Validación con botón</h2>
+<div class="row">
+    <div class="mb-3 col">
+        <label>Solo Letras</label>
+        <input id="letras" class="form-control" type="text" placeholder="Letras" />
+        <span id="spanLetras" hidden style="color:red;">SOLO SE ACEPTAN LETRAS</span>
+        <br />
+        <button class="btn btn-primary mt-2" onclick="soloLetras2()">Validar</button>
+    </div>
+
+    <div class="mb-3 col">
+        <label>Solo Numeros</label>
+        <input id="numeros" class="form-control" type="text" placeholder="Numeros" />
+        <span id="spanNumeros" hidden style="color:red;">SOLO SE ACEPTAN NUMEROS</span>
+        <br />
+        <button class="btn btn-primary mt-2" onclick="soloNumeros2()">Validar</button>
+    </div>
+</div>
+
+<script>
+    function soloNumeros(evt) {
+        var entrada = String.fromCharCode(evt.which);
+        if (!(/[0-9]/.test(entrada))) {
+            evt.preventDefault();
+        }
+    }
+
+    function soloLetras(evt) {
+        var entrada = String.fromCharCode(evt.which);
+        if (!(/[a-z A-Z]/.test(entrada))) {
+            evt.preventDefault();
+        }
+    }
+
+    function soloLetras2() {
+        var contenido = $('#letras').val();
+        if (!/[a-zA-Z\s]+$/.test(contenido.trim())) {
+            document.getElementById('spanLetras').removeAttribute("hidden");
+        } else {
+            document.getElementById('spanLetras').setAttribute("hidden", true);
+        }
+    }
+
+    function soloNumeros2() {
+        var contenido = $('#numeros').val();
+        if (!/[0-9]+$/.test(contenido.trim())) {
+            document.getElementById('spanNumeros').removeAttribute("hidden");
+        } else {
+            document.getElementById('spanNumeros').setAttribute("hidden", true);
+        }
+    }
+</script>

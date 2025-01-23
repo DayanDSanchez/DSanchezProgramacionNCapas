@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "RandomUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>RANDOM USER</h1>
+    <hr />
+    <p>Para agregar un nuevo usuario dar clic en el botón</p>
+    <button class="btn btn-primary" onclick="AddUser()"><i class="bi bi-person-add" style="font-size: 2em;"></i></button>
+    <table class="table table-striped table-hover" id="tabla" style="text-align: center">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Direccion</th>
+                <th>Email</th>
+                <th>Celular</th>
+                <th>Edad</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Foto</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    //$.ajax({
+    //    url: 'https://randomuser.me/api/?results=5',
+    //    dataType: 'json',
+    //    success: function (data) {
+    //        console.log(data.results);
+
+
+    //        var tabla = document.getElementById("tbody");
+    //        for (var i = 0; i < data.results.length; i++) {
+    //            var row = "<tr><td>" + data.results[i].name.first + "</td><td>"
+    //                + data.results[i].name.last + "</td><td>"
+    //                + data.results[i].email + "</td></tr>";
+    //            console.log(row);
+    //            tabla.innerHTML += row;
+    //        }
+    //    }
+    //});
+
+    function AddUser() {
+        $.ajax({
+            url: 'https://randomuser.me/api/',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data.results);
+
+                var tabla = document.getElementById("tbody");
+                var row = "<tr><td>" + data.results[0].name.first + " " + data.results[0].name.last + "</td><td>"
+                    + data.results[0].location.street.name + " " + data.results[0].location.street.number
+                    + ", " + data.results[0].location.city
+                    + ", " + data.results[0].location.state
+                    + ", " + data.results[0].location.country + "</td><td>"
+                    + data.results[0].email + "</td><td>"
+                    + data.results[0].cell + "</td><td>"
+                    + data.results[0].dob.age + "</td><td>"
+                    + data.results[0].dob.date + "</td><td>"
+                    + '<img src="' + data.results[0].picture.medium + '"></td></tr>';
+                console.log(row);
+                tabla.innerHTML += row;
+            }
+        });
+        window.scrollTo({
+            top: document.body.scrollHeight, behavior: "smooth"
+        });
+    }
+
+</script>
+

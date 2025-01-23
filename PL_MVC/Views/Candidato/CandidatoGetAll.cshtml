@@ -1,0 +1,63 @@
+﻿@model ML.Candidato
+@{
+    ViewBag.Title = "CandidatoGetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Candidatos</h2>
+
+<div class="container">
+    <a href="@Url.Action("Form", "Candidato")" class="btn btn-primary"><i class="bi bi-file-plus"></i> Agregar Candidato</a>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Editar</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Edad</th>
+                <th>Email</th>
+                <th>Telefono</th>
+                <th>Direccion</th>
+                @*<th>Curriculum</th>*@
+                <th>Universidad</th>
+                <th>Carrera</th>
+                <th>Bolsa de Trabajo</th>
+                <th>Vacante</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ML.Candidato candidato in Model.Candidatos)
+            {
+                <tr>
+                    <th><a class="btn btn-warning" href="@Url.Action("Form","Candidato", new { IdCandidato = candidato.IdCandidato })"><i class="bi bi-pencil-square"></i></a></th>
+                    <td>
+                        @if (candidato.Foto == null)
+                        {
+                            <img id="img" src="~/Content/img/ImageUser.jpg" width="50" height="50">
+                        }
+                        else
+                        {
+                            <img id="img" src="data:image/png;base64,@Convert.ToBase64String(candidato.Foto)" width="50" height="50">
+                        }
+                    </td>
+                    <td>@candidato.Nombre</td>
+                    <td>@candidato.ApellidoPaterno</td>
+                    <td>@candidato.ApellidoMaterno</td>
+                    <td>@candidato.Edad</td>
+                    <td>@candidato.Correo</td>
+                    <td>@candidato.Telefono</td>
+                    <td>@candidato.Direccion</td>
+                    @*<td>@candidato.Curriculum</td>*@
+                    <td>@candidato.Universidad.NombreUniversidad</td>
+                    <td>@candidato.Carrera.NombreCarrera</td>
+                    <td>@candidato.BolsaTrabajo.NombreBolsaTrabajo</td>
+                    <td>@candidato.Vacante.NombreVacante</td>
+                    <td><a href="@Url.Action("Delete","Candidato", new { IdCandidato = candidato.IdCandidato })" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar el registro?')"><i class="bi bi-trash"></i></a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

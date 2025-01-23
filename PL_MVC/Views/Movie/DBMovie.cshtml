@@ -1,0 +1,84 @@
+﻿@model ML.Pelicula
+@{
+    ViewBag.Title = "DBMovie";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h1>DB Movie</h1>
+    <hr />
+    <div class="row">
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["Mensaje"]
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["Error"]
+            </div>
+        }
+        @foreach (ML.DatosPelicula datos in Model.results)
+        {
+            <div class="card m-3" style="width: 18rem;">
+                <img class="card-img-top mt-2" src="https://image.tmdb.org/t/p/w500/@datos.poster_path" />
+                <div class="card-body">
+                    <ul class="list-group list-group-flush mb-2">
+                        <li class="list-group-item">@datos.title</li>
+                    </ul>
+                    <p class="card-text" style="height:200px; overflow:scroll" >@datos.overview</p>
+                    <form action="@Url.Action("AgregarAFavoritos", "Movie")" method="post">
+                        <input type="hidden" name="idPelicula" value="@datos.id" />
+                        <button type="submit" class="btn btn-primary">Agregar a Favoritos</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+
+
+
+
+    @*<h1>CON JS</h1>
+        <hr />
+        <div id="movies" class="row ">
+
+        </div>*@
+
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script>
+    //Movies();
+    //function Movies() {
+    //    $.ajax({
+    //        url: 'https://api.themoviedb.org/3/movie/popular?api_key=c028e8e71d7169c8678c4dca6b7dda90',
+    //        dataType: 'json',
+    //        success: function (data) {
+    //            console.log(data.results[0]);
+    //            for (i = 0; i < data.results.length; i++) {
+    //                //console.log(data.results[i].title);
+    //                const card = `
+    //                <div class="card m-3" style="width: 18rem;">
+    //                <img class="card-img-top mt-2" src="https://image.tmdb.org/t/p/w500${data.results[i].poster_path}"
+    //                  <div class="card-body">
+    //                    <ul class="list-group list-group-flush">
+    //                        <li class="list-group-item">${data.results[i].title}</li>
+    //                    </ul>
+    //                    <p class="card-text">${data.results[i].overview}</p>
+    //                  </div>
+    //                </div>
+    //              `;
+    //                document.getElementById("movies").innerHTML += card;
+    //            }
+    //        }
+    //    });
+    //}
+
+</script>

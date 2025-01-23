@@ -1,0 +1,66 @@
+﻿@model ML.Empleado
+@{
+    ViewBag.Title = "EmpleadoGetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Empleado Desde TXT</h2>
+    @using (Html.BeginForm("SubirTxt", "Empleado", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+
+        <div class="container">
+            <div class="row">
+                <div class="mb-3 col">
+                    <label for="txtFile" class="form-label">Seleccionar archivo TXT:</label>
+                    <input id="txtFile" name="txtFile" type="file" class="form-control" />
+                    <button type="submit" class="btn btn-primary mt-2">
+                        <i class="bi bi-upload m-2"></i>Subir
+                    </button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        if (ViewBag.Message != null)
+        {
+            <div class="alert alert-info mt-3">@ViewBag.Message</div>
+        }
+        <div class="table table-responsive mt-4">
+            @if (Model.Empleados == null)
+            {
+                <h1>NO HAY REGISTROS</h1>
+            }
+            else
+            {
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Numero Empleado</th>
+                            <th>Nombre</th>
+                            <th>RFC</th>
+                            <th>Fecha Control</th>
+                            <th>Salario</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (ML.Empleado empleado in Model.Empleados)
+                        {
+                            <tr>
+                                <td>@empleado.NumeroEmpleado</td>
+                                <td>@empleado.Nombre</td>
+                                <td>@empleado.RFC</td>
+                                <td>@empleado.FechaControl</td>
+                                <td>@empleado.Salario</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    }
+
+</div>
+

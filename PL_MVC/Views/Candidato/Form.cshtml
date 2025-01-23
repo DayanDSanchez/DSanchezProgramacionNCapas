@@ -1,0 +1,297 @@
+﻿@model ML.Candidato
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .error-message {
+        color: red;
+        font-size: 15px;
+    }
+
+    .correct-message {
+        color: green;
+        font-size: 15px;
+    }
+</style>
+<div class="container">
+    <h1 class="m-3">Agregar Candidato</h1>
+    @using (Html.BeginForm("Form", "Candidato", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <hr />
+        <h3>INFORMACIÓN CANDIDATO</h3>
+        <div class="row">
+            @if (Model.IdCandidato != 0)
+            {
+                <div class="mb-3 col">
+                    @Html.LabelFor(model => model.IdCandidato, new { @class = "form-label" })
+                    @Html.TextBoxFor(model => model.IdCandidato, new { @class = "form-control", @readonly = "readonly" })
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="mb-3 col">
+                <h2>Foto</h2>
+                <input id="ImagenUsuario" name="ImagenUsuario" type="file" class="form-control" onchange="visualizarImagen(this), validarImagen()">
+                @if (Model.Foto == null)
+                {
+                    <img id="img" src="~/Content/img/ImageUser.jpg" width="200" height="200" class="mb-2 pt-3">
+                }
+                else
+                {
+                    <img id="img" src="data:image/png;base64,@Convert.ToBase64String(Model.Foto)" width="200" height="200" class="mb-2 pt-3">
+                    @Html.Hidden("ImagenActual", Convert.ToBase64String(Model.Foto))
+                }
+                @Html.HiddenFor(model => model.Foto)
+            </div>
+            @*<div class="mb-3 col">
+                    <h2>Curriculum</h2>
+                    <input id="CurriculumCandidato" name="CurriculumCandidato" type="file" class="form-control" onchange="validarCv()">
+                </div>*@
+            <div class="mb-3 col">
+                <h2>Curriculum</h2>
+                <input id="CurriculumCandidato" name="CurriculumCandidato" type="file" class="form-control" onchange="validarCv()">
+                @if (Model.Curriculum != null)
+                {
+                    <a href="@Url.Action("DownloadCurriculum", new { id = Model.IdCandidato })" class="btn btn-success mt-2"><i class="bi bi-file-earmark-person"></i> Descargar Curriculum</a>
+                    @Html.Hidden("CurriculumActual", Convert.ToBase64String(Model.Curriculum))
+                }
+                @Html.HiddenFor(model => model.Curriculum)
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Nombre, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Nombre, new { @id = "Nombre", @class = "form-control", placeholder = "Nombre", @onkeypress = "soloLetras(event)" })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.ApellidoPaterno, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.ApellidoPaterno, new { @id = "ApellidoPaterno", @class = "form-control", placeholder = "Apellido Paterno", @onkeypress = "soloLetras(event)" })
+                @Html.ValidationMessageFor(model => model.ApellidoPaterno, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.ApellidoMaterno, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.ApellidoMaterno, new { @id = "ApellidoMaterno", @class = "form-control", placeholder = "Apellido Materno", @onkeypress = "soloLetras(event)" })
+                @Html.ValidationMessageFor(model => model.ApellidoMaterno, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Edad, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Edad, new { @id = "Edad", @class = "form-control", placeholder = "Edad" })
+                @Html.ValidationMessageFor(model => model.Edad, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Direccion, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Direccion, new { @id = "Direccion", @class = "form-control", placeholder = "Direccion", @onkeypress = "numerosYletras(event)" })
+                @Html.ValidationMessageFor(model => model.Direccion, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+            <div class="mb-3 col">
+            </div>
+        </div>
+        <hr />
+        <h3>CONTACTO</h3>
+        <div class="row">
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Correo, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Correo, new { @id = "email", @class = "form-control", placeholder = "Correo", @onblur = "validarEmail(this)" })
+                @Html.ValidationMessageFor(model => model.Correo, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+            <div class="mb-3 col">
+                <label class="form-label">confirmar email</label>
+                <input id="ConfirmarEmail" class="form-control" placeholder="confirmar email" onblur="confirmarEmail()">
+                <span class="error-message"></span>
+                <span class="correct-message"></span>
+            </div>
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Telefono, new { @class = "form-label" })
+                @Html.TextBoxFor(model => model.Telefono, new { @id = "Telefono", @class = "form-control", placeholder = "Telefono", @onkeypress = "telefonoCelular(event)", @onblur = "telefonoCelular(event)" })
+                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+        </div>
+        <hr />
+        <h3>INFORMACIÓN ACADÉMICA</h3>
+        <div class="row">
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Universidad.IdUniversidad, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Universidad.IdUniversidad, new SelectList(Model.Universidad.Universidades, "IdUniversidad", "NombreUniversidad"), "Selecciona Universidad", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Universidad.IdUniversidad, "", new { @class = "text-danger" })
+                <span class="error-message"></span>
+            </div>
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Carrera.IdCarrera, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Carrera.IdCarrera, new SelectList(Model.Carrera.Carreras, "IdCarrera", "NombreCarrera"), "Selecciona Carrera", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Carrera.IdCarrera, "", new { @class = "text-danger" })
+            </div>
+            <div class="mb-3 col">
+            </div>
+        </div>
+        <hr />
+        <h3>INFORMACIÓN VACANTE</h3>
+        <div class="row">
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.BolsaTrabajo.IdBolsaTrabajo, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.BolsaTrabajo.IdBolsaTrabajo, new SelectList(Model.BolsaTrabajo.BolsaTrabajos, "IdBolsaTrabajo", "NombreBolsaTrabajo"), "Selecciona Bolsa de Trabajo", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.BolsaTrabajo.IdBolsaTrabajo, "", new { @class = "text-danger" })
+            </div>
+            <div class="mb-3 col">
+                @Html.LabelFor(model => model.Vacante.IdVacante, new { @class = "form-label" })
+                @Html.DropDownListFor(model => model.Vacante.IdVacante, new SelectList(Model.Vacante.Vacantes, "IdVacante", "NombreVacante"), "Selecciona Vacante", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Vacante.IdVacante, "", new { @class = "text-danger" })
+            </div>
+            <div class="mb-3 col">
+            </div>
+        </div>
+        <div class="mb-3 col">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            @Html.ActionLink("Regresar", "CandidatoGetAll", "Candidato", new { @class = "btn btn-danger" })
+        </div>
+    }
+</div>
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script>
+    function visualizarImagen(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#img').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0])
+        }
+    }
+
+    function validarImagen() {
+        var estensionesPermitidas = ['jpeg', 'jpg', 'png']
+        var extensioArchivo = document.getElementById('ImagenUsuario').value.split('.').pop().toLowerCase();
+        var isValidFile = false;//Saber si es valida o no es valida
+        for (var index in estensionesPermitidas) {
+            if (extensioArchivo == estensionesPermitidas[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son: * . ' + estensionesPermitidas.join(',*.'));
+            $("#ImagenUsuario").val("")
+        }
+        return isValidFile;
+    }
+
+    function validarCv() {
+        var estensionesPermitidas = ['pdf']
+        var extensioArchivo = document.getElementById('CurriculumCandidato').value.split('.').pop().toLowerCase();
+        var isValidFile = false;//Saber si es valida o no es valida
+        for (var index in estensionesPermitidas) {
+            if (extensioArchivo == estensionesPermitidas[index]) {
+                isValidFile = true;
+                break;
+            }
+        }
+        if (!isValidFile) {
+            alert('Las extensiones permitidas son: * . ' + estensionesPermitidas.join(',*.'));
+            $("#CurriculumCandidato").val("")
+        }
+        return isValidFile;
+    }
+
+    function soloLetras(evt) {
+        var entrada = String.fromCharCode(evt.which);
+        var inputField = evt.target;
+        var mensajeError = inputField.parentNode.querySelector('.error-message');
+        mensajeError.textContent = '';
+        if (!(/[a-z A-Z]/.test(entrada))) {
+            evt.preventDefault();
+            inputField.style.borderColor = 'red';
+            mensajeError.textContent = 'Solo se aceptan letras';
+        } else {
+            inputField.style.borderColor = 'green';
+        }
+    }
+
+    function numerosYletras(evt) {
+        var entrada = String.fromCharCode(evt.which);
+        var inputField = evt.target;
+        var mensajeError = inputField.parentNode.querySelector('.error-message');
+        mensajeError.textContent = '';
+        if (!(/[a-z A-Z0-9]/.test(entrada))) {
+            evt.preventDefault();
+            mensajeError.textContent = 'Solo se aceptan letras y números';
+            inputField.style.borderColor = 'red';
+        }
+        else {
+            inputField.style.borderColor = 'green';
+        }
+    }
+    function validarEmail(input) {
+        var email = input.value;
+        var mensajeError = input.parentNode.querySelector('.error-message');
+
+        mensajeError.textContent = '';
+        if (!(/^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/.test(email))) {
+            mensajeError.textContent = 'Ingresa correo valido.';
+        }
+    }
+
+    function confirmarEmail() {
+        confirmEmail = document.getElementById("ConfirmarEmail")
+        email = document.getElementById("email");
+        var mensajeError = confirmEmail.parentNode.querySelector('.error-message');
+        var mensajeCorrect = confirmEmail.parentNode.querySelector('.correct-message');
+        if (!email.value == "") {
+            if (email.value != confirmEmail.value) {
+                mensajeCorrect.textContent = '';
+                mensajeError.textContent = 'Verifica Email';
+                //alert('Verifica Email');
+            } else {
+                mensajeError.textContent = '';
+                mensajeCorrect.textContent = 'Email correcto'
+                //alert('Email correcto')
+            }
+        }
+    }
+    function telefonoCelular(evt) {
+        var inputField = evt.target;
+        var mensajeError = inputField.parentNode.querySelector('.error-message');
+        mensajeError.textContent = '';
+
+        if (evt.type === "keypress") {
+            var charCode = evt.which ? evt.which : evt.keyCode;
+            if (charCode < 48 || charCode > 57) {
+                evt.preventDefault();
+                mensajeError.textContent = 'Solo se permiten dígitos';
+                return;
+            }
+
+            // Limitar la longitud a 10 dígitos
+            var valorActual = inputField.value;
+            if (valorActual.length >= 10) {
+                evt.preventDefault();
+                mensajeError.textContent = 'El número no puede tener más de 10 dígitos';
+                return;
+            }
+        }
+
+        if (evt.type === "blur") {
+            var valorActual = inputField.value;
+            // Validar que el número tenga exactamente 10 dígitos y que inicie con 55
+            if (!/^55\d{8}$/.test(valorActual)) {
+                mensajeError.textContent = 'El número debe iniciar con 55 y tener 10 dígitos';
+            }
+        }
+    }
+</script>

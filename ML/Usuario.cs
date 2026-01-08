@@ -15,7 +15,7 @@ namespace ML
         [Required(ErrorMessage = "Nombre es obligatorio")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = " Nombre solo se acepta letras ")]
         public string Nombre{ get; set; }
-        [DisplayName("Apellido Paterno")]
+        //[DisplayName("Apellido Paterno")]
         [Required(ErrorMessage = "Apellido Paterno es obligatorio")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Apellido Paterno solo se acepta letras")]
         public string ApellidoPaterno{ get; set; }

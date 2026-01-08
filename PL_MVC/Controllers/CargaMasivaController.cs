@@ -32,7 +32,7 @@ namespace PL_MVC.Controllers
                     string pathExcel = Server.MapPath("~/CargaMasiva/") + Path.GetFileNameWithoutExtension(excel.FileName) + "-" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".xlsx";
 
                     if (!System.IO.File.Exists(pathExcel))
-                    {
+                    {   
                         excel.SaveAs(pathExcel);//Guardando copia de archivo
 
                         string cadenaConnection = ConfigurationManager.ConnectionStrings["OleDbConnection"].ToString() + pathExcel;
@@ -81,7 +81,7 @@ namespace PL_MVC.Controllers
             {
                 //Insertar 
                 string cadenaConnection = ConfigurationManager.ConnectionStrings["OleDbConnection"].ToString() + Session["RutaExcel"];
-                ML.Result resultLeerExcel = BL.Usuario.LeerExcel(cadenaConnection);
+                ML.Result resultLeerExcel = BL.Usuario.LeerExcel(cadenaConnection); 
 
                 if (resultLeerExcel.Correct)
                 {

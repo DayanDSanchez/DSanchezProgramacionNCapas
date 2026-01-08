@@ -39,9 +39,6 @@ namespace PL_MVC.Controllers
 
                     pelicula = peliculasList;
                 }
-
-
-
             }
             return View(pelicula);
         }

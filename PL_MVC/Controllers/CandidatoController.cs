@@ -90,80 +90,80 @@ namespace PL_MVC.Controllers
         public ActionResult CandidatoGetAll()
         {
             //usando webApi
-            ML.Candidato resultCandidato = new ML.Candidato();
-            resultCandidato.Candidatos = new List<object>();
-            using (var client = new HttpClient())
-            {
-                string endPoint = ConfigurationManager.AppSettings["CandidatoEndPoint"];
-                client.BaseAddress = new Uri(endPoint);
-                var responseTask = client.GetAsync("Candidato/GetAll");
-                responseTask.Wait();
-
-                var result = responseTask.Result;
-                if (result.IsSuccessStatusCode)
-                {
-                    var readTask = result.Content.ReadAsAsync<ML.Result>();
-                    readTask.Wait();
-
-
-                    foreach (var resultItem in readTask.Result.Objects)
-                    {
-                        ML.Candidato resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Candidato>(resultItem.ToString());
-                        resultCandidato.Candidatos.Add(resultItemList);
-                    }
-                }
-            }
-            return View(resultCandidato);
-
-            //Usando SOAP
-            //string action = "http://tempuri.org/ICandidato/CandidatoGetAllEF";
-            //string url = "http://localhost:64228/Candidato.svc?wsdl";
-
-            //HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            //request.Headers.Add("SOAPAction", action);
-            //request.ContentType = "text/xml;charset=\"utf-8\"";
-            //request.Accept = "text/xml";
-            //request.Method = "POST"; // Cambia a POST ya que estás usando un servicio SOAP
-
-            //// Crear el sobre SOAP
-            //string soapEnvelope = $@"<?xml version=""1.0"" encoding=""utf-8""?>
-            //                        <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:tem=""http://tempuri.org/"">
-            //                           <soapenv:Header/>
-            //                           <soapenv:Body>
-            //                              <tem:CandidatoGetAllEF/>
-            //                           </soapenv:Body>
-            //                        </soapenv:Envelope>";
-
-            //// Enviar la solicitud
-            //using (Stream stream = request.GetRequestStream())
+            //ML.Candidato resultCandidato = new ML.Candidato();
+            //resultCandidato.Candidatos = new List<object>();
+            //using (var client = new HttpClient())
             //{
-            //    byte[] content = Encoding.UTF8.GetBytes(soapEnvelope);
-            //    stream.Write(content, 0, content.Length);
-            //}
+            //    string endPoint = ConfigurationManager.AppSettings["CandidatoEndPoint"];
+            //    client.BaseAddress = new Uri(endPoint);
+            //    var responseTask = client.GetAsync("Candidato/GetAll");
+            //    responseTask.Wait();
 
-            //// Obtener la respuesta
-            //try
-            //{
-            //    using (WebResponse response = request.GetResponse())
+            //    var result = responseTask.Result;
+            //    if (result.IsSuccessStatusCode)
             //    {
-            //        using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-            //        {
-            //            string result = reader.ReadToEnd();
-            //            Console.WriteLine("Respuesta SOAP:");
-            //            Console.WriteLine(result);
+            //        var readTask = result.Content.ReadAsAsync<ML.Result>();
+            //        readTask.Wait();
 
-            //            // Deserializar el XML
-            //            var candidatos = GetAllCandidatos(result); // Captura el objeto completo
-            //            return View(candidatos); // Asegúrate de que tu vista esté lista para recibir este objeto
+
+            //        foreach (var resultItem in readTask.Result.Objects)
+            //        {
+            //            ML.Candidato resultItemList = Newtonsoft.Json.JsonConvert.DeserializeObject<ML.Candidato>(resultItem.ToString());
+            //            resultCandidato.Candidatos.Add(resultItemList);
             //        }
             //    }
             //}
-            //catch (WebException ex)
-            //{
-            //    Console.WriteLine($"Error: {ex.Message}");
-            //    ViewBag.Error = ex.Message; // Para mostrar en la vista si es necesario
-            //}
-            //return View();
+            //return View(resultCandidato);
+
+            //Usando SOAP
+            string action = "http://tempuri.org/ICandidato/CandidatoGetAllEF";
+            string url = "http://localhost:64228/Candidato.svc?wsdl";
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Headers.Add("SOAPAction", action);
+            request.ContentType = "text/xml;charset=\"utf-8\"";
+            request.Accept = "text/xml";
+            request.Method = "POST"; // Cambia a POST ya que estás usando un servicio SOAP
+
+            // Crear el sobre SOAP
+            string soapEnvelope = $@"<?xml version=""1.0"" encoding=""utf-8""?>
+                                    <soapenv:Envelope xmlns:soapenv=""http://schemas.xmlsoap.org/soap/envelope/"" xmlns:tem=""http://tempuri.org/"">
+                                       <soapenv:Header/>
+                                       <soapenv:Body>
+                                          <tem:CandidatoGetAllEF/>
+                                       </soapenv:Body>
+                                    </soapenv:Envelope>";
+
+            // Enviar la solicitud
+            using (Stream stream = request.GetRequestStream())
+            {
+                byte[] content = Encoding.UTF8.GetBytes(soapEnvelope);
+                stream.Write(content, 0, content.Length);
+            }
+
+            // Obtener la respuesta
+            try
+            {
+                using (WebResponse response = request.GetResponse())
+                {
+                    using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                    {
+                        string result = reader.ReadToEnd();
+                        Console.WriteLine("Respuesta SOAP:");
+                        Console.WriteLine(result);
+
+                        // Deserializar el XML
+                        var candidatos = GetAllCandidatos(result); // Captura el objeto completo
+                        return View(candidatos); // Asegúrate de que tu vista esté lista para recibir este objeto
+                    }
+                }
+            }
+            catch (WebException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                ViewBag.Error = ex.Message; // Para mostrar en la vista si es necesario
+            }
+            return View();
 
 
             //Usando SP

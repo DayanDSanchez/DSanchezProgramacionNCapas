@@ -213,7 +213,8 @@ namespace BL
                                 usuario.ApellidoPaterno = (row[2].ToString());
                                 usuario.ApellidoMaterno = (row[3].ToString());
                                 usuario.Telefono = (row[4].ToString());
-                                usuario.Email = (row[5].ToString());
+                                usuario.Email = (row[
+                                    5].ToString());
                                 usuario.UserName = (row[6].ToString());
                                 usuario.Password = (row[7].ToString());
                                 usuario.Sexo = (row[8].ToString());
@@ -518,7 +519,7 @@ namespace BL
                     {
                         result.Objects = new List<object>();
 
-                        foreach (var usuario in listaUsuarios)
+                        foreach (var usuario in listaUsuarios)  
                         {
                             ML.Usuario usuarioItem = new ML.Usuario();
                             usuarioItem.IdUsuario = usuario.Id;
@@ -540,7 +541,7 @@ namespace BL
                             usuarioItem.Curp = usuario.Curp;
                             usuarioItem.Rol = new ML.Rol();
                             usuarioItem.Rol.IdRol = Convert.ToInt32(usuario.IdRol);
-                            usuarioItem.Imagen = usuario.ImageUser;
+                            usuarioItem.Imagen = null;
                             usuarioItem.Status = usuario.Status;
                             usuarioItem.Direccion = new ML.Direccion();
                             usuarioItem.Direccion.IdDireccion = Convert.ToInt32(usuario.IdDireccion);
@@ -609,34 +610,8 @@ namespace BL
                             usuarioItem.FechaNacimiento = "";
                         }
                         usuarioItem.Curp = usuario.Curp;
-                        usuarioItem.Rol = new ML.Rol();
-                        usuarioItem.Rol.IdRol = Convert.ToInt32(usuario.IdRol);
-                        usuarioItem.Imagen = usuario.ImageUser;
-
-                        usuarioItem.Direccion = new ML.Direccion();
-                        usuarioItem.Direccion.IdDireccion = usuario.IdDireccion.Value;
-                        usuarioItem.Direccion.Calle = usuario.Calle;
-                        usuarioItem.Direccion.NumeroExterior = usuario.NumeroExterior;
-                        usuarioItem.Direccion.NumeroInterior = usuario.NumeroInterior;
-
-                        usuarioItem.Direccion.Colonia = new ML.Colonia();
-                        usuarioItem.Direccion.Colonia.IdColonia = usuario.IdColonia.Value;
-                        usuarioItem.Direccion.Colonia.CodigoPostal = usuario.CodigoPostal;
-
-                        usuarioItem.Direccion.Colonia.Municipio = new ML.Municipio();
-                        usuarioItem.Direccion.Colonia.Municipio.IdMunicipio = usuario.IdMunicipio.Value;
-
-                        usuarioItem.Direccion.Colonia.Municipio.Estado = new ML.Estado();
-                        usuarioItem.Direccion.Colonia.Municipio.Estado.IdEstado = usuario.IdEstado.Value;
-
-                        result.Object = usuarioItem;
                         result.Correct = true;
-
-                    }
-                    else
-                    {
-                        result.Correct = false;
-                        result.ErrorMessage = "No hay registros en la tabla";
+                        result.Object = usuarioItem;
                     }
                 }
 
@@ -816,13 +791,6 @@ namespace BL
                     usuarioItem.Telefono = usuario.Telefono;
                     usuarioItem.Email = usuario.Email;
                     usuarioItem.UserName = usuario.UserName;
-                    usuarioItem.Password = usuario.Password;
-                    usuarioItem.Sexo = usuario.Sexo;
-                    usuarioItem.Celular = usuario.Celular;
-                    usuarioItem.FechaNacimiento = Convert.ToDateTime(usuario.FechaNacimiento);
-                    usuarioItem.Curp = usuario.Curp;
-                    usuarioItem.IdRol = Convert.ToInt32(usuario.Rol.IdRol);
-
                     if (usuarioItem != null)
                     {
                         context.Usuarios.Add(usuarioItem);
@@ -1121,5 +1089,10 @@ namespace BL
             }
             return result;
         }
+
+
+
+
+
     }
 }

@@ -1,0 +1,17 @@
+﻿@model ML.Usuario
+@using ReportViewerForMvc;
+@{
+    ViewBag.Title = "Reporting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Reporting</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h5>Usuarios</h5>
+            @Html.ReportViewer(ViewBag.ReportViewer as Microsoft.Reporting.WebForms.ReportViewer)
+        </div>
+    </div>
+</div>

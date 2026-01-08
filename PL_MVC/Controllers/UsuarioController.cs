@@ -1,10 +1,13 @@
 ﻿using ML;
 using System;
+using Microsoft.Reporting.WebForms;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebSockets;
+using System.Web.UI.WebControls;
 
 namespace PL_MVC.Controllers
 {
@@ -18,6 +21,7 @@ namespace PL_MVC.Controllers
             usuario.Rol = new ML.Rol();
             usuario.Nombre = Nombre ?? "";
             usuario.ApellidoPaterno = ApellidoPaterno ?? "";
+            usuario.ApellidoPaterno = ApellidoPaterno == null ? "" : ApellidoPaterno;
             usuario.ApellidoMaterno = ApellidoMaterno ?? "";
             usuario.Rol.IdRol = IdRol ?? 0;
             ML.Result result = BL.Usuario.GetAllEF(usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Rol.IdRol);
@@ -44,6 +48,7 @@ namespace PL_MVC.Controllers
         public ActionResult Form(int? IdUsuario)
         {
             ML.Usuario usuario = new ML.Usuario();
+            usuario.Rol = new ML.Rol();
             usuario.Direccion = new ML.Direccion();
             usuario.Direccion.Colonia = new ML.Colonia();
             usuario.Direccion.Colonia.Municipio = new ML.Municipio();
@@ -55,18 +60,17 @@ namespace PL_MVC.Controllers
                 if (result.Correct)
                 {
                     usuario = (ML.Usuario)result.Object;
-                    usuario.Sexo = usuario.Sexo;
-                    ML.Result resultEstado = BL.Estado.EstadoGetAllEF();
-                    if (resultEstado.Correct)
-                    {
-                        usuario.Direccion.Colonia.Municipio.Estado.Estados = resultEstado.Objects;
-                    }
+                    usuario.Sexo = usuario.Sexo?.Trim().ToUpper();
                     ML.Result resultMunicipio = BL.Municipio.MunicipioGetByIdEstado(usuario.Direccion.Colonia.Municipio.Estado.IdEstado);
                     if (resultMunicipio.Correct)
                     {
                         usuario.Direccion.Colonia.Municipio.Municipios = resultMunicipio.Objects;
                     }
-                    ML.Result resultColonia = BL.Colonia.ColoniaGetByIdMunicipio(usuario.Direccion.Colonia.Municipio.IdMunicipio);
+                    else
+                    {
+                        usuario.Direccion.Colonia.Municipio.Municipios = new List<object>();
+                    }
+                        ML.Result resultColonia = BL.Colonia.ColoniaGetByIdMunicipio(usuario.Direccion.Colonia.Municipio.IdMunicipio);
                     if (resultColonia.Correct)
                     {
                         usuario.Direccion.Colonia.Colonias = resultColonia.Objects;
@@ -77,15 +81,13 @@ namespace PL_MVC.Controllers
                     ViewBag.MensajeError = "Ocuarrio un error";
                 }
             }
-            else //ADD
+
+            ML.Result resultEstado = BL.Estado.EstadoGetAllEF();
+            if (resultEstado.Correct)
             {
-                usuario.Rol = new ML.Rol();
-                ML.Result resultEstado = BL.Estado.EstadoGetAllEF();
-                if (resultEstado.Correct)
-                {
-                    usuario.Direccion.Colonia.Municipio.Estado.Estados = resultEstado.Objects;
-                }
+                usuario.Direccion.Colonia.Municipio.Estado.Estados = resultEstado.Objects;
             }
+
             ML.Result resultRol = BL.Rol.GetAllEFLinq();
             if (resultRol.Correct)
             {
@@ -100,7 +102,7 @@ namespace PL_MVC.Controllers
 
         [HttpPost] //Agregar o actualizar
         public ActionResult Form(ML.Usuario usuario)
-            {
+        {
             ML.Result result = new ML.Result();
             //DateTime auxiliar = DateTime.ParseExact(usuario.FechaNacimiento, "dd-mm-yyyy", CultureInfo.InvariantCulture);
             //usuario.FechaNacimiento = auxiliar.ToString("dd-MM-yyyy");
@@ -192,6 +194,38 @@ namespace PL_MVC.Controllers
             System.IO.BinaryReader reader = new System.IO.BinaryReader(Foto.InputStream);
             byte[] data = reader.ReadBytes((int)Foto.ContentLength);
             return data;
+        }
+
+        [HttpGet]
+        public ActionResult Reporting(string Nombre, string ApellidoPaterno, string ApellidoMaterno, int? IdRol)
+        {
+            ML.Usuario usuario = new ML.Usuario();
+            usuario.Rol = new ML.Rol();
+            usuario.Nombre = Nombre ?? "";
+            usuario.ApellidoPaterno = ApellidoPaterno ?? "";
+            usuario.ApellidoPaterno = ApellidoPaterno == null ? "" : ApellidoPaterno;
+            usuario.ApellidoMaterno = ApellidoMaterno ?? "";
+            usuario.Rol.IdRol = IdRol ?? 0;
+
+            ML.Result result = BL.Usuario.GetAllEF(usuario.Nombre, usuario.ApellidoPaterno, usuario.ApellidoMaterno, usuario.Rol.IdRol);
+
+            ReportViewer reportViewer = new ReportViewer();
+            reportViewer.ProcessingMode = ProcessingMode.Local;
+            reportViewer.SizeToReportContent = true;
+            reportViewer.Width = Unit.Percentage(900);
+            reportViewer.Height = Unit.Percentage(900);
+            reportViewer.LocalReport.ReportPath = Request.MapPath(Request.ApplicationPath) + @"Reports\UsuarioReport.rdlc";
+            reportViewer.LocalReport.DataSources.Add(new ReportDataSource("Usuario", result.Objects));
+            ViewBag.ReportViewer = reportViewer;
+            if (result.Correct)
+            {
+                usuario.Usuarios = result.Objects;
+            }
+            else
+            {
+
+            }
+            return View(usuario);
         }
 
     }

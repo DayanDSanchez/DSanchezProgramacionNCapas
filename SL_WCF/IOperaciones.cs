@@ -19,5 +19,6 @@ namespace SL_WCF
         int Multiplicacion(int numero1, int numero2);
         [OperationContract]
         int Division(int numero1, int numero2);
+        
     }
 }
